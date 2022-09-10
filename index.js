@@ -9,11 +9,11 @@ const app = express();
 mongoose.connect(process.env.MONGO_DB_CONNECT);
 
 app.use(express.json());
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*')
-    cors({origin: '*'})
-    next()
-});
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: '*',
+}));
 app.use(routes);
 
 //inicia o servidor
