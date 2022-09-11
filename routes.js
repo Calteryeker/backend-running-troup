@@ -19,7 +19,7 @@ routes.get('/user', AuthMiddleware, UserController.recUser);
 //Rota para registrar recorde
 routes.post('/record', AuthMiddleware, UserController.saveRecord);
 
-//Rota para visualizar placar de livros
+//Rota para visualizar placar de lideres
 routes.get('/leaderboard', AuthMiddleware, UserController.leaderboard);
 
 //Rotas para testar disponibilidade cadastro
