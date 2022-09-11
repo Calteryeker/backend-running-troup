@@ -1,4 +1,5 @@
 const express = require('express');
+const request = require('request');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const routes = require('./routes');
@@ -9,7 +10,6 @@ const app = express();
 mongoose.connect(process.env.MONGO_DB_CONNECT);
 
 app.use(express.json());
-app.use(cors())
 app.all('*', function (req, res, next) {
 
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
@@ -21,7 +21,18 @@ app.all('*', function (req, res, next) {
         // CORS Preflight
         res.send();
     } else {
-        next()
+        var targetURL = req.header('Target-URL'); // Target-URL ie. https://example.com or http://example.com
+        if (!targetURL) {
+            res.send(500, { error: 'There is no Target-Endpoint header in the request' });
+            return;
+        }
+        request({ url: process.env.APP_URL + req.url, method: req.method, json: req.body, headers: {'Authorization': req.header('Authorization')} },
+            function (error, response, body) {
+                if (error) {
+                    console.error('error: ' + response.statusCode)
+                }
+//                console.log(body);
+            }).pipe(res);
     }
 });
 app.use(routes);
