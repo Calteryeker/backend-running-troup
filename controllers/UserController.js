@@ -43,7 +43,8 @@ module.exports = {
        res.status(200)
     })
 
-    return res.send()
+    const userRecovered = await User.findById(req.userId);
+    return res.send(userRecovered.recordes)
   },
 
   async leaderboard(req, res){
